@@ -1,0 +1,539 @@
+\documentclass[12pt,a4paper]{article}
+
+% Paketler
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext, newtxmath}
+\usepackage{amsmath} 
+\usepackage{fancybox}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[turkish]{babel}
+\usepackage[left=3cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\linespread{1.2}
+
+\begin{document}
+
+% Kapak Sayfası
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{1cm}
+    \textbf{\large T.C. KÜTAHYA DUMLUPINAR ÜNİVERSİTESİ} \\
+    \textbf{\large MÜHENDİSLİK FAKÜLTESİ} \\
+    \vspace{1.5cm}
+    \textbf{SOSYAL SEÇMELİ DERS I: TEKNİK DOKÜMAN HAZIRLAMA} \\
+    \vspace{2.5cm}
+    \huge \textbf{WHEATSTONE KÖPRÜSÜ: HASSAS DİRENÇ ÖLÇÜMÜNÜN TEORİK ANALİZİ VE ENDÜSTRİYEL UYGULAMALARI} \\
+    \vspace{2.5cm}
+    \large
+    \textbf{Hazırlayan:} Setenay Tolkun \\
+    \textbf{Öğrenci Numarası:} 202313152035 \\
+    \textbf{Bölüm:} Elektrik-Elektronik Mühendisliği \\
+    \vspace{1.5cm}
+    \textbf{Ders Sorumlusu:} \\
+    Öğr. Gör. Ali İhsan Çanakoğlu \\
+    \vfill
+    \large 22 Aralık 2025
+\end{center}
+
+\newpage
+\pagenumbering{arabic}
+
+% Özet
+\section*{Özet}
+Bu çalışma, temel fizik ve elektriksel ölçüm tekniklerinin en önemli yapı taşlarından biri olan Wheatstone Köprüsü'nü teorik ve uygulamalı boyutlarıyla incelemektedir. 19. yüzyılda geliştirilen bu köprü düzeneği, bilinmeyen elektriksel dirençlerin son derece yüksek bir hassasiyetle ölçülmesine olanak tanımaktadır. Makale kapsamında öncelikle Kirchhoff Yasaları temel alınarak köprü dengesinin matematiksel ispatı yapılmış; denge durumundaki direnç oranları arasındaki bağıntılar teorik çerçevede türetilmiştir. Dokümanın ilerleyen bölümlerinde, köprünün sadece statik direnç ölçümü değil, aynı zamanda sensör teknolojileri aracılığıyla fiziksel değişimlerin hassas elektriksel sinyallere dönüştürülmesindeki kritik rolü ele alınmıştır.Bu kapsamlı inceleme, söz konusu ölçüm tekniğinin modern endüstriyel kontrol sistemlerindeki (PLC/SCADA) yerini vurgulayarak literatürdeki güncel yaklaşımları bir araya getirmeyi amaçlamaktadır.
+
+\newpage
+
+% Giriş
+\section{Giriş}
+Elektriksel ölçüm teknikleri, fizik ve mühendislik bilimlerinin en temel uygulama alanlarından birini teşkil etmektedir. Özellikle direnç gibi temel devre parametrelerinin yüksek hassasiyetle belirlenmesi, modern elektronik sistemlerin tasarımı ve güvenilirliği açısından kritik bir öneme sahiptir.
+
+Bu bağlamda 1833 yılında Samuel Hunter Christie tarafından temelleri atılan ve 1843 yılında Sir Charles Wheatstone tarafından popüler hale getirilen Wheatstone Köprüsü, elektriksel denge prensibi üzerine kurulu en güvenilir ölçüm yöntemlerinden biri olarak kabul edilir [1]. Geleneksel Ohm Yasası uygulamaları düşük direnç değerlerinde ölçüm hatalarına açıkken, Wheatstone köprüsü diferansiyel bir yapı sunarak bu hataları minimize etmektedir [2].
+
+Günümüzde bu köprü yapısı, sadece direnç ölçümü ile sınırlı kalmayıp; strain gauge (gerinim ölçer), RTD (sıcaklık dedektörü) ve basınç sensörleri gibi pek çok endüstriyel algılayıcının temel çalışma prensibini oluşturmaktadır [3]. Bu makale kapsamında, köprünün matematiksel modelleri Kirchhoff kanunları çerçevesinde incelenecek ve modern endüstriyel kontrol sistemlerindeki (PLC/SCADA) uygulamaları siber-fiziksel güvenlik perspektifiyle tartışılacaktır.
+
+Elektrik-elektronik mühendisliğinde hassas veri toplama (data acquisition) süreçleri, Wheatstone köprüsünün sağladığı diferansiyel gerilim okuma yeteneği sayesinde gürültüden arındırılmaktadır [4]. Bu durum, sistemin hem fiziksel doğruluğunu hem de veri iletim güvenliğini doğrudan etkileyen bir unsurdur.
+
+\newpage
+\section{Endüstriyel Uygulama Alanları}
+
+Wheatstone köprüsü, laboratuvar ortamındaki hassas direnç ölçümlerinden öte, günümüzde endüstriyel otomasyonun ve veri toplama sistemlerinin (DAQ) temel yapı taşını oluşturmaktadır. Sensör teknolojilerinin analog dünyadan dijital dünyaya geçişinde bu köprü topolojisi bir arayüz görevi görür [5]Wheatstone köprüsü, günümüzde sadece laboratuvar ortamında direnç ölçmek için değil, fiziksel parametreleri elektriksel sinyallere dönüştüren sensör sistemlerinin kalbi olarak kullanılmaktadır.Endüstriyel kontrol sistemlerinde (ICS), Wheatstone köprüsünden alınan analog veriler kritik süreçlerin kontrolünde kullanılır. Bir yük hücresinden (Load Cell) gelen verinin manipüle edilmesi, sistemin aşırı yüklenmesine veya hatalı dozajlama yapmasına neden olabilir. Bu bağlamda, köprü çıkışındaki analog sinyallerin siber-fiziksel güvenliği, modern akıllı fabrikalarda (Sanayi 4.0) öncelikli bir konudur [6].
+Günümüzde "Smart Sensors" olarak adlandırılan yapılar, içerisinde hazır bir Wheatstone köprüsü ve sinyal işleme birimi barındırır. Bu sensörlerin IoT protokolleri (MQTT, CoAP) üzerinden bulut sistemlerine veri aktarması sürecinde, köprünün fiziksel katmandaki doğruluğu, tüm veri zincirinin güvenilirliğini belirleyen en temel unsurdur.[7]
+
+\subsection{Gerinim Ölçerler (Strain Gauges) ve Yapısal Sağlık İzleme}
+Gerinim ölçerler, mekanik bir yapı üzerindeki mikroskobik boyuttaki şekil değişimlerini elektriksel dirence dönüştüren elemanlardır. Bir köprü devresinin kollarına yerleştirilen bu sensörler, köprünün dengesini bozarak gerilme miktarıyla orantılı bir çıkış voltajı üretir.
+
+
+
+Bu uygulama, özellikle havacılık ve inşaat mühendisliğinde Yapısal Sağlık İzleme süreçlerinde kritiktir. Örneğin, bir köprünün veya uçak kanadının maruz kaldığı stres, tam köprü (Full-Bridge) konfigürasyonu kullanılarak son derece düşük hata payı ile ölçülebilir [6]. Tam köprü kurulumu, sadece ölçüm hassasiyetini artırmakla kalmaz, aynı zamanda sıcaklık değişimlerinden kaynaklanan hataları da otomatik olarak elimine eder.
+
+\subsection{Sıcaklık Ölçümü ve RTD (Resistance Temperature Detectors)}
+Endüstride en yaygın kullanılan sıcaklık sensörlerinden biri olan PT100 ve PT1000 serisi RTD'ler, çalışma prensibi olarak Wheatstone köprüsüne dayanır. Sıcaklık arttıkça sensörün direnci lineer bir şekilde artmaktadır [8]. 
+
+Endüstriyel sahalarda sensör ile kontrol paneli arasındaki mesafe bazen yüzlerce metre olabilir. Bu durumda iletken kabloların kendi dirençleri ölçüm hatasına yol açar. Bu hatayı engellemek için geliştirilen "Üç Telli Bağlantı" tekniği, kablo direncini köprünün diğer kolunda dengeleyerek ölçümden çıkarır. Bu yöntem, proses kontrol sistemlerinde yüksek doğruluk sağlar [9].
+
+\subsection{IoT Entegrasyonu ve Veri Güvenliği}
+Modern IoT sistemlerinde Wheatstone köprüsünden gelen zayıf analog sinyaller, enstrümantasyon yükselteçleri tarafından güçlendirildikten sonra Analog-Dijital Dönüştürücüler (ADC) vasıtasıyla mikrodenetleyicilere aktarılır [10]. 
+
+
+
+Özellikle endüstriyel kontrol sistemlerinde (PLC/SCADA), bu analog verilerin doğruluğu siber-fiziksel güvenlik açısından büyük önem taşır. Sensör verilerinin fiziksel olarak manipüle edilmesi, sistemin yanlış kararlar vermesine ve endüstriyel kazalara yol açabilir. Bu nedenle, köprü çıkışlarının bütünlüğünün korunması, modern akıllı fabrikaların güvenlik protokollerinin bir parçası haline gelmiştir [11].
+
+\subsection{Akıllı Sensörler ve Endüstriyel Haberleşme}
+Günümüzde akıllı sensörler olarak adlandırılan yapılar, içerisinde hazır bir Wheatstone köprüsü ve sinyal işleme birimi barındırır. Bu sensörlerin IoT protokolleri üzerinden bulut sistemlerine veri aktarması sürecinde, köprünün fiziksel katmandaki doğruluğu, tüm veri zincirinin güvenilirliğini belirleyen en temel unsurdur [12].
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resimt.png}
+    \caption{Endüstriyel Sensör Entegrasyonu ve Veri Akış Diyagramı.}
+    \label{fig:t}
+\end{figure}
+
+\section{Teorik Arka Plan}
+Wheatstone köprüsü, dört direncin bir elmas şeklinde birbirine bağlanmasıyla oluşur. Köprünün temel amacı, değeri bilinmeyen bir direnci ($R_x$), değeri kesin olarak bilinen diğer üç direnç ($R_1, R_2, R_3$) yardımıyla denge prensibi üzerinden tespit etmektir.Çok küçük değerli dirençlerin hatasız ölçülebilmesi için ise wheatstone köprüsü üzerinde yapılan bir değişiklikle elde edilen ve “Kelvin Köprüsü” olarak bilinen düzenek kullanılır. Yalıtım direnci ve sızıntı direnci gibi çok yüksek değerli dirençlerin ölçülmesinde ise, MEGER (Megaohmmetre) denilen ölçü aletleri ile yüksek gerilim altında direnç ölçme işlemi yapılır.[13]
+\newpage
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resimk.png}
+    \caption{Wheatstone Köprüsü Devre Diyagramı [12].}
+    \label{fig:k}
+\end{figure}
+
+\section{Teorik Analiz ve Diferansiyel Ölçüm Prensibi}
+Wheatstone köprüsünün hassasiyeti, kollar arasındaki direnç değişimlerinin diferansiyel olarak ölçülmesine dayanır.
+
+\subsection{Kirchhoff Gerilim Yasası (KGY) Uygulaması}
+Köprü kollarındaki gerilim düşümlerini analiz etmek için her bir çevrim için denklem yazılmalıdır:
+\begin{align}
+    V_s - I_1 R_1 - I_3 R_3 &= 0 \\
+    V_s - I_2 R_2 - I_x R_x &= 0 
+\end{align}
+
+\subsection{Gerinim Ölçerler (Strain Gauges) ve Kuvvet Ölçümü}
+Gerinim ölçerler, üzerlerine binen mekanik stres ile dirençleri değişen hassas elemanlardır. Bir köprünün kollarından birine veya dördüne birden yerleştirilen bu sensörler, çok küçük boyutsal değişimleri ölçülebilir gerilim farklarına dönüştürür.
+
+\subsection{Dengesiz Köprü Durumu ve Çıkış Gerilimi}
+Sensör uygulamalarında köprü her zaman dengede değildir. Köprü çıkış gerilimi $V_{out}$, kollar arasındaki potansiyel farktır:
+\begin{equation}
+    V_{out} = V_s \left( \frac{R_3}{R_1 + R_3} - \frac{R_x}{R_2 + R_x} \right)
+\end{equation}
+
+
+\newpage
+\subsection{Kirchhoff Yasaları ile Devre Analizi}
+Köprü devresinin analizi için Kirchhoff'un Akım Yasası (KAY) ve Voltaj Yasası (KVY) kullanılır. Köprü kollarından geçen akımlar şu şekilde tanımlanır:
+
+\begin{itemize}
+    \item $I_1$ ve $I_3$: Köprünün sol kolundaki dirençler üzerinden geçen akımlar.
+    \item $I_2$ ve $I_x$: Köprünün sağ kolundaki dirençler üzerinden geçen akımlar.
+    \item $I_G$: Köprünün orta kolundaki galvanometre üzerinden geçen akım.
+\end{itemize}
+
+\subsection{Kirchhoff Akım Yasası (KAY) Analizi}
+Köprünün üst (A) ve alt (B) düğüm noktaları ile yan (C ve D) düğüm noktaları için KAY denklemleri yazıldığında, sistemin dinamik yapısı ortaya çıkar. C ve D düğümleri için denklemler şöyledir:
+
+\begin{align}
+    I_1 - I_3 - I_G &= 0 \\
+    I_2 - I_x + I_G &= 0
+\end{align}
+
+\subsection{Kirchhoff Voltaj Yasası (KVY) Analizi}
+Köprü devresi içerisinde kapalı döngüler (loop) oluşturularak gerilim dengeleri incelendiğinde, kaynak gerilimi ($V_s$) ile dirençler üzerindeki düşümler arasındaki ilişki şu formüllerle ifade edilir:
+
+\begin{align}
+    V_s - I_1 R_1 - I_3 R_3 &= 0 \\
+    I_1 R_1 + I_G R_G - I_2 R_2 &= 0 \\
+    I_3 R_3 - I_x R_x - I_G R_G &= 0
+\end{align}
+
+
+
+\subsection{Denge Durumunun Analitik Türetilmesi}
+Köprü dengede kabul edildiğinde, C ve D noktaları arasındaki potansiyel fark sıfıra iner. Bu durum, galvanometre üzerinden geçen akımın sıfır olması ($I_G = 0$) anlamına gelir. Bu kritik varsayım altında KAY denklemleri basitleşerek $I_1 = I_3$ ve $I_2 = I_x$ eşitliklerini verir. KVY denklemlerinden yola çıkarak oranlama yapıldığında:
+
+\begin{equation}
+    \frac{I_1 R_1}{I_1 R_3} = \frac{I_2 R_2}{I_2 R_x} \implies \frac{R_1}{R_3} = \frac{R_2}{R_x}
+\end{equation}
+
+Bu bağıntı sonucunda, bilinmeyen direnç $R_x$ değerini veren nihai mühendislik denklemi elde edilir:
+
+\begin{equation}
+    R_x = \frac{R_2 \cdot R_3}{R_1}
+\end{equation}
+\section{Dengesiz Köprü Analizi ve Thevenin Eşdeğer Devresi}
+Ölçüm sistemlerinde köprü her zaman tam dengede ($I_G = 0$) değildir. Özellikle strain gauge ve RTD gibi sensör uygulamalarında, ölçülen fiziksel büyüklük dirençte küçük bir değişime ($\Delta R$) neden olur ve bu da köprünün dengesini bozar. Bu durumdaki çıkış gerilimini analiz etmek için Thevenin teoremi kullanılır.
+
+\subsection{Thevenin Geriliminin ($V_{th}$) Hesaplanması}
+Köprünün çıkış terminalleri olan C ve D noktaları arasındaki açık devre gerilimi, Thevenin gerilimi olarak tanımlanır. Giriş gerilimi $V_s$ olmak üzere:
+
+\begin{equation}
+    V_{th} = V_{CD} = V_s \left( \frac{R_3}{R_1 + R_3} - \frac{R_x}{R_2 + R_x} \right)
+\end{equation}
+
+Bu denklem, köprüdeki herhangi bir direnç değişimi sonucunda ortaya çıkacak olan çıkış sinyalinin matematiksel modelidir.
+
+\subsection{Thevenin Direncinin ($R_{th}$) Hesaplanması}
+Thevenin direncini bulmak için gerilim kaynağı kısa devre edilir ve çıkış terminallerinden bakılan eşdeğer direnç hesaplanır. Bu durumda $R_1$ ile $R_3$ paralel, $R_2$ ile $R_x$ paralel hale gelir:
+
+\begin{equation}
+    R_{th} = \frac{R_1 R_3}{R_1 + R_3} + \frac{R_2 R_x}{R_2 + R_x}
+\end{equation}
+
+
+
+\subsection{Duyarlılık (Sensitivity) Analizi}
+Bir ölçüm sisteminin kalitesi, girişindeki küçük değişimlere ne kadar büyük tepki verdiği ile ölçülür. Köprü hassasiyeti ($S$), çıkış gerilimindeki değişimin dirençteki değişime oranı olarak tanımlanır:
+
+\begin{equation}
+    S = \frac{dV_{out}}{dR_x} \approx V_s \frac{R_2}{(R_2 + R_x)^2}
+\end{equation}
+
+\section{Sinyal Koşullama ve İşlemsel Yükselteç (Op-Amp) Entegrasyonu}
+Wheatstone köprüsü dengeden saptığında üretilen çıkış gerilimi ($V_{out}$), daha önceki bölümlerde Thevenin eşdeğeri üzerinden açıklandığı üzere genellikle milivolt (mV) mertebesinde kalmaktadır. Endüstriyel kontrol sistemleri (PLC), veri toplama kartları (DAQ) ve Analog-Dijital Dönüştürücüler (ADC) ise genellikle 0-10V veya 4-20mA aralığında standartlaştırılmış sinyallere ihtiyaç duyar. Bu nedenle, köprü çıkışının bir sinyal koşullama katmanı ile işlenmesi zorunludur.
+
+\subsection{Diferansiyel Yükselteç Yapısı ve Kazanç Analizi}
+Köprünün C ve D uçları arasındaki potansiyel farkı yükseltmek için kullanılan en temel yapı diferansiyel yükselteçtir. Bu yapıda, köprü kollarındaki ortak mod gürültüleri (common-mode noise) bastırılırken sadece fark sinyali işlenir. Çıkış gerilimi, geri besleme direnç oranlarına bağlı olarak şu şekilde ifade edilir:
+
+\begin{equation}
+    V_{gain} = \frac{R_{f}}{R_{in}} (V_D - V_C)
+\end{equation}
+
+Burada $R_f$ geri besleme direncini, $R_{in}$ ise giriş direncini temsil etmektedir. Diferansiyel yapı, özellikle uzun iletim hatlarında sinyal üzerine binen gürültülerin elenmesinde kritik rol oynar.
+
+\subsection{Enstrümantasyon Yükselteçleri (Instrumentation Amplifiers)}
+Tek bir Op-Amp kullanımı, düşük giriş empedansı nedeniyle köprü devresinde "yükleme etkisi" (loading effect) yaratarak ölçüm hassasiyetini bozabilir. Bu sorunu aşmak için endüstriyel standart olan üç Op-Amp'lı enstrümantasyon yükselteci yapısı tercih edilir.[14] Bu devrenin toplam kazancı ($G$), dışarıdan bağlanan bir $R_{gain}$ direnci ile şu formüle göre belirlenir:
+
+\begin{equation}
+    G = \left( 1 + \frac{2R_{1}}{R_{gain}} \right) \frac{R_{3}}{R_{2}}
+\end{equation}
+
+
+
+Yüksek giriş empedansı ve yüksek ortak mod reddetme oranı (CMRR), bu yapıyı zayıf sensör sinyallerinin işlenmesinde vazgeçilmez kılmaktadır. Siber güvenlik perspektifinden bakıldığında, bu yükseltme katmanı "Analog Sinyal Manipülasyonu" saldırılarına karşı en kritik noktadır. Yükselteç devresindeki pasif bileşenlere yapılacak fiziksel bir müdahale, dijital sisteme aktarılan verinin hatalı olmasına ve dolayısıyla endüstriyel süreçlerin yanlış yönetilmesine yol açabilir.
+
+\subsection{Alçak Geçiren Filtreleme ve Gürültü Reddi}
+Endüstriyel tesislerdeki elektrik motorları ve anahtarlamalı güç kaynakları, köprü sinyalleri üzerinde yüksek frekanslı elektromanyetik girişim (EMI) oluşturur. Bu gürültülerin dijitalleştirme aşamasından önce temizlenmesi için aktif alçak geçiren filtreler (Low-Pass Filter) kullanılır.[15] Filtrenin kesim frekansı ($f_c$) tasarımı şu bağıntı ile gerçekleştirilir:
+
+\begin{equation}
+    f_c = \frac{1}{2\pi RC}
+\end{equation}
+
+Filtreleme işlemi, sadece verinin doğruluğunu sağlamakla kalmaz, aynı zamanda sistemin kararlılığını artırarak siber-fiziksel sistemlerdeki veri bütünlüğünü donanım katmanında koruma altına alır.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resimm.png}
+    \caption{Wheatstone Köprüsü ve Enstrümantasyon Yükselteci Entegrasyon Şeması.}
+    \label{fig:m}
+\end{figure}
+
+
+
+\section{Hata Analizi ve Ölçüm Belirsizliği}
+Hassas ölçüm sistemlerinde, elde edilen sonuçların doğruluğu sadece devre topolojisine değil, kullanılan bileşenlerin tolerans değerlerine de bağlıdır. Wheatstone köprüsü ile yapılan bir ölçümde, bilinmeyen direnç $R_x$ üzerindeki toplam belirsizliği hesaplamak için diferansiyel analiz yöntemleri uygulanmalıdır.
+
+\subsection{Direnç Toleranslarının Etki Analizi}
+Köprü denge denklemi $R_x = (R_2 \cdot R_3) / R_1$ olarak tanımlanmıştır. Her bir direncin ($R_1, R_2, R_3$) kendi içinde bir hata payı ($\Delta R$) olduğu varsayıldığında, $R_x$ üzerindeki toplam mutlak hata, her bir değişkenin kısmi türevi alınarak şu şekilde hesaplanır:
+
+\begin{equation}
+    \Delta R_x = \left| \frac{\partial R_x}{\partial R_1} \right| \Delta R_1 + \left| \frac{\partial R_x}{\partial R_2} \right| \Delta R_2 + \left| \frac{\partial R_x}{\partial R_3} \right| \Delta R_3
+\end{equation}
+
+Bu denklemdeki kısmi türevler hesaplandığında, hassasiyet katsayıları ortaya çıkar:
+
+\begin{align}
+    \frac{\partial R_x}{\partial R_1} &= -\frac{R_2 R_3}{R_1^2} \\
+    \frac{\partial R_x}{\partial R_2} &= \frac{R_3}{R_1} \\
+    \frac{\partial R_x}{\partial R_3} &= \frac{R_2}{R_1}
+\end{align}
+
+\subsection{Bağıl Hata ve Yüzdesel Belirsizlik}
+Ölçümün kalitesini belirleyen temel kriter bağıl hatadır ($\Delta R_x / R_x$). Yukarıdaki denklemler birleştirildiğinde, toplam bağıl hata her bir direncin bağıl hatalarının toplamına eşit olur:
+
+\begin{equation}
+    \frac{\Delta R_x}{R_x} = \frac{\Delta R_1}{R_1} + \frac{\Delta R_2}{R_2} + \frac{\Delta R_3}{R_3}
+\end{equation}
+
+Bu sonuç göstermektedir ki; eğer köprü kollarında \%1 toleranslı dirençler kullanılırsa, bilinmeyen direnç üzerindeki toplam hata payı en kötü senaryoda \%3'e kadar çıkabilmektedir. Bu durum, siber-fiziksel sistemlerde sensör verisinin manipülasyonu için bir "gürültü aralığı" yaratabilir.
+
+\subsection{Sıcaklık Kaynaklı Sürüklenme (Temperature Drift)}
+Direnç değerleri sadece üretim toleranslarından değil, aynı zamanda ortam sıcaklığından da etkilenir. Direncin sıcaklık katsayısı ($\alpha$) dikkate alındığında, sıcaklığa bağlı değişim şu formülle ifade edilir:
+
+\begin{equation}
+    R(T) = R_0 [1 + \alpha(T - T_0)]
+\end{equation}
+
+Köprü devrelerinde sıcaklık hatasını minimize etmek için, karşılıklı kolların aynı sıcaklık katsayısına sahip olması ve termal olarak birbirine yakın yerleştirilmesi gerekmektedir.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resimh.png}
+    \caption{Hata Analizi ve Tolerans Değerlerinin Ölçüm Hassasiyetine Etkisi Grafiği.}
+    \label{fig:h}
+\end{figure}
+
+\section{Sayısal Uygulama ve Tasarım Örneği}
+Teorik formüllerin doğrulanması ve ölçüm hassasiyetinin gözlemlenmesi amacıyla, endüstriyel bir yük hücresi (load cell) senaryosu üzerinden sayısal bir analiz gerçekleştirilmiştir. Bu tür hesaplamalar, donanım tasarım aşamasında hata paylarının öngörülmesi açısından kritiktir [16].
+
+\subsection{Devre Parametrelerinin Belirlenmesi}
+Analiz edilecek köprü devresinde kullanılan bileşen değerleri şu şekildedir:
+\begin{itemize}
+    \item Giriş Gerilimi ($V_s$): 10 V DC
+    \item Sabit Dirençler ($R_1, R_2, R_3$): 1000 $\Omega$ ($\%0.1$ toleranslı metal film)
+    \item Sensör Direnci ($R_x$): Dengede 1000 $\Omega$, yük altında $1000.5 \Omega$
+\end{itemize}
+
+\subsection{Çıkış Geriliminin Hesaplanması}
+Sensör üzerindeki $0.5 \Omega$ ($\Delta R$) değişimin çıkışta yarattığı fark gerilimi ($V_{out}$), dengesiz köprü denklemi kullanılarak hesaplanmıştır:
+
+\begin{equation}
+    V_{out} = V_s \left( \frac{R_3}{R_1 + R_3} - \frac{R_x}{R_2 + R_x} \right)
+\end{equation}
+
+İşlemler adım adım uygulandığında:
+\begin{align}
+    V_{out} &= 10 \left( 0.5 - 0.499875 \right) \\
+    V_{out} &= 1.25 \text{ mV}
+\end{align}
+
+Bu sonuç, köprü devresinin ne kadar küçük direnç değişimlerini algılayabildiğini göstermektedir. Ancak 1.25 mV'luk bu sinyal gürültüye çok açıktır. Bu aşamada, kazancı ($G=1000$) olan bir enstrümantasyon yükselteci kullanılarak sinyal 1.25 V seviyesine çekilmelidir.
+
+\section{Vaka Analizi: Sensör Manipülasyonu ve Siber Güvenlik}
+Modern endüstriyel tesislerde (Industry 4.0), Wheatstone köprüsü tabanlı sensörlerden gelen veriler kritik karar verme mekanizmalarını beslemektedir. Bu katmanda yapılabilecek bir manipülasyonun siber-fiziksel etkileri literatürde "analog katman saldırıları" olarak tanımlanmaktadır [17].
+
+\subsection{Analog Sinyal Enjeksiyonu ve Veri Bütünlüğü}
+Düşman bir aktörün, sensör kablolarına fiziksel olarak eriştiği veya donanım analizi araçlarıyla (örn. Flipper Zero, emülatörler) elektromanyetik girişim (EMI) oluşturduğu varsayılsın. Köprü kollarındaki dengeye dışarıdan eklenecek paralel bir direnç, ölçülen $R_x$ değerini olduğundan farklı göstererek kontrol döngüsünü yanıltabilir.
+
+\subsection{Saldırı Senaryosu ve Fiziksel Etkiler}
+Özellikle kritik altyapılarda (barajlar, enerji santralleri) kullanılan gerilme sensörlerine yapılan bir müdahale, sistemin gerçekte var olan mekanik yorgunluğu rapor etmesini engelleyebilir. Bu durum, siber güvenliğin sadece ağ katmanında değil, analog sinyalin üretildiği en alt katmanda (fiziksel katman) başlaması gerektiğini kanıtlamaktadır [6].
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{rsimg.png}
+    \caption{Sensör Manipülasyonu ve Siber-Fiziksel Sistemlerde Hata Yayılım Modeli.}
+    \label{fig:g}
+\end{figure}
+
+
+\section{Donanım Seçimi ve Malzeme Karakteristiklerinin Ölçüme Etkisi}
+Hassas bir Wheatstone köprüsü tasarımı, sadece teorik formüllere değil, kullanılan pasif bileşenlerin fiziksel özelliklerine de göbekten bağlıdır. Bu bölümde, endüstriyel standartlarda kullanılan direnç teknolojilerinin karşılaştırmalı analizi sunulmaktadır.
+
+\subsection{Direnç Teknolojilerinin Karşılaştırmalı Analizi}
+Köprü kollarında kullanılan dirençlerin tipi, sistemin uzun vadeli kararlılığını (stability) ve gürültü tabanını (noise floor) belirler. Aşağıdaki tablo, mühendislik seçimlerinde dikkate alınan temel parametreleri özetlemektedir:
+
+\begin{table}[h!]
+    \centering
+    \caption{Direnç Teknolojilerinin Teknik Karşılaştırması}
+    \vspace{0.5cm}
+    \begin{tabular}{|l|c|c|c|r|}
+        \hline
+        \textbf{Direnç Tipi} & \textbf{Tolerans} & \textbf{Sıcaklık Katsayısı} & \textbf{Gürültü} & \textbf{Maliyet} \\ \hline
+        Karbon Kompozit & \%5 - \%10 & 1000 ppm/°C & Çok Yüksek & Düşük \\ \hline
+        Metal Film & \%0.1 - \%1 & 25 - 100 ppm/°C & Düşük & Orta \\ \hline
+        Tel Sarımlı (Wirewound) & \%0.005 & 1 - 5 ppm/°C & Çok Düşük & Yüksek \\ \hline
+        İnce Film (Thin Film) & \%0.01 & 5 - 25 ppm/°C & Çok Düşük & Orta-Yüksek \\ \hline
+    \end{tabular}
+\end{table}
+
+Bu veriler ışığında, özellikle siber-fiziksel sistemlerde kullanılan sensör arayüzlerinde "Metal Film" veya "İnce Film" dirençlerin kullanımı, sistemin dış çevresel etmenlere karşı direncini artırmaktadır [8].
+
+\section{Sonuç ve Gelecek Vizyonu}
+Bu çalışmada, 19. yüzyıldan günümüze taşınan Wheatstone köprüsü topolojisi; teorik ispatlar, hata analizleri, sinyal koşullama yöntemleri ve siber güvenlik perspektifiyle detaylı bir şekilde incelenmiştir.
+
+\subsection{Genel Değerlendirme}
+Yapılan matematiksel analizler sonucunda görülmüştür ki; Wheatstone köprüsü, diferansiyel ölçüm yapısı sayesinde gürültüyü donanım katmanında elimine edebilen en verimli yapılardan biridir. Kirchhoff yasaları üzerinden yapılan türetmeler, köprünün denge durumundaki kararlılığını kanıtlarken; Thevenin analizi ve Op-Amp entegrasyonu, bu yapının modern dijital sistemlere (PLC/IoT) nasıl veri sağladığını ortaya koymuştur.
+
+\subsection{Siber-Fiziksel Güvenlik Katmanında Analog Veri Bütünlüğü}
+Bir siber güvenlik uzman adayı olarak bu çalışmanın en kritik bulgusu, "analog veri güvenliği" kavramıdır. Dijital dünyadaki şifreleme yöntemleri ne kadar güçlü olursa olsun, verinin kaynağı olan Wheatstone köprüsü katmanında yapılacak fiziksel bir manipülasyon (örn. direnç yanıltma veya EMI enjeksiyonu), tüm sistemin güvenilirliğini temelden sarsmaktadır. Gelecekteki çalışmalar, bu analog açıkların donanım seviyesinde algılanması ve otonom hata düzeltme algoritmalarının bu köprü yapılarına entegre edilmesi üzerine yoğunlaşmalıdır.
+
+\subsection{Gelecek Teknolojileri ve Grafen Sensörler}
+Wheatstone köprüsü konsepti, nanoteknoloji ile birleşerek grafen tabanlı sensörlerde yeni bir boyut kazanmaktadır. Grafenin yüksek elektriksel iletkenliği ve esnekliği, köprü devrelerinin hassasiyetini atomik seviyelere taşıyacaktır. Bu durum, siber-fiziksel sistemlerin (CPS) daha akıllı, daha hassas ancak saldırılara karşı daha sofistike savunma mekanizmalarına sahip olmasını zorunlu kılacaktır [13].
+
+\section{Donanım Pentest Araçları ve Wheatstone Köprüsü Üzerindeki Teknik Manipülasyonlar}
+Wheatstone köprüsü gibi hassas analog sistemler, siber-fiziksel güvenliğin "fiziksel katman" (Physical Layer) zafiyetlerini temsil eder. Bu bölümde, siber güvenlik dünyasında standart haline gelmiş donanım analiz araçlarının, bu köprü yapılarını nasıl manipüle edebileceği teknik parametrelerle incelenmektedir.
+
+\subsection{Flipper Zero: GPIO ve PWM Aracılığıyla Analog Yanıltma (Spoofing)}
+Flipper Zero, sadece bir radyo modülü değil, aynı zamanda 3.3V seviyesinde dijital sinyal üretebilen bir GPIO arayüzüdür. Wheatstone köprüsü ile entegre çalışan bir sistemde Flipper Zero şu tekniklerle saldırı gerçekleştirebilir:
+
+\begin{itemize}
+    \item \textbf{PWM Sinyal Enjeksiyonu ve Low-Pass Filtreleme:} Köprü çıkışındaki $V_{out}$ sinyali milivolt (mV) seviyesindedir. Bir saldırgan, Flipper Zero'nun GPIO pinlerini kullanarak yüksek frekanslı bir PWM (Pulse Width Modulation) sinyali üretir. Bu sinyal, basit bir RC devresi (direnç ve kondansatör) üzerinden geçirilerek "DC voltaja" dönüştürülür. 
+    \item \textbf{Teknik Etki:} Elde edilen bu yapay gerilim, Wheatstone köprüsünün gerçek çıkışına (yükselteç girişine) paralel olarak enjekte edilir. Bu durum, köprünün fiziksel olarak dengede olmasına rağmen, PLC'nin "aşırı yük" veya "kritik basınç" alarmı almasına neden olur.
+    \item \textbf{Uygulama Alanı:} Akıllı tartı sistemleri ve yük hücreleri üzerinde "hayalet ağırlık" oluşturmak.
+\end{itemize}
+
+
+
+\subsection{Bus Pirate: SPI/I2C Veri Yolu Sniffing ve MitM Saldırıları}
+Köprüden gelen analog sinyal, bir ADC (Analog-to-Digital Converter) tarafından dijital veriye dönüştürülür. Bus Pirate, bu dijitalleşmiş verinin iletildiği yolu hedef alır.
+
+\begin{itemize}
+    \item \textbf{Protokol Analizi:} ADC, köprüden gelen mV verisini 10-bit veya 16-bitlik dijital paketlere çevirir ve SPI veri yolu üzerinden ana işlemciye gönderir. Bus Pirate, bu veri yoluna kanca atarak (sniffing) geçen ham direnç verisini anlık olarak okur.
+    \item \textbf{Man-in-the-Middle (MitM) Saldırısı:} Saldırgan, Bus Pirate kullanarak ADC'den gelen orijinal veriyi durdurabilir ve yerine kendi belirlediği sahte verileri (örneğin; tehlike anında sistemi "normal" gösteren paketleri) enjekte edebilir. Bu, sistemin güvenlik mekanizmalarını tamamen kör eder.
+\end{itemize}
+
+\subsection{JTAGulator ve Donanım Tersine Mühendisliği}
+Wheatstone köprüsü verilerini işleyen mikrodenetleyicilerde (MCU) genellikle gizli debug portları bulunur. JTAGulator, bu portların yerini tespit etmek için kullanılan bir "pinout" bulucudur.
+
+\begin{itemize}
+    \item \textbf{Firmware Extraction:} JTAG veya SWD portları tespit edildikten sonra, cihazın firmware kodu çekilir. Bu kod içerisindeki "kalibrasyon katsayıları" ve "eşik değerleri" analiz edilir.
+    \item \textbf{Denge Algoritması Sabotajı:} Köprünün denge durumunu hesaplayan yazılımsal formüllere sızıldığında, saldırgan köprünün hangi direnç değişimlerine nasıl tepki verdiğini tam olarak öğrenir ve en sinsi saldırı vektörünü (sistemin algılayamayacağı kadar küçük ama hatalı sapmaları) tasarlar.
+\end{itemize}
+
+
+
+\subsection{Sinyal Karıştırma (Jamming) ve Diferansiyel Mod Saldırıları}
+SDR (Software Defined Radio - HackRF One vb.) cihazları, köprü kablolarında indükleme yaratarak çalışır.
+
+\begin{itemize}
+    \item \textbf{EMI Enjeksiyonu:} Wheatstone köprüsü kabloları, ekranlanmamışsa (unshielded) bir anten görevi görür. SDR cihazı, köprünün besleme frekansıyla rezonansa giren bir elektromanyetik alan oluşturur.
+    \item \textbf{Common Mode Bias:} Bu saldırı, köprünün her iki çıkış ucundaki gerilimi aynı anda yükselterek, fark yükseltecini (instrumentation amplifier) doyuma (saturation) sokar. Sonuç olarak, köprü fiziksel veriyi iletemez hale gelir ve sistem "Donanım Hatası" vererek kapanır (DoS).
+\end{itemize}
+
+\section{Siber-Fiziksel Tehdit Modellemesi ve Risk Matrisi}
+Bir siber güvenlik uzmanı, Wheatstone köprüsü tabanlı bir sistemi korumak için şu risk matrisini dikkate almalıdır:
+
+\begin{table}[h!]
+    \centering
+    \caption{Analog Sensör Katmanı Tehdit Matrisi [20]}
+    \vspace{0.5cm}
+    \begin{tabular}{|l|l|l|c|}
+        \hline
+        \textbf{Saldırı Türü} & \textbf{Kullanılan Araç} & \textbf{Hedef Katman} & \textbf{Kritiklik} \\ \hline
+        Signal Spoofing & Flipper Zero / DAC & Analog Çıkış & Çok Yüksek \\ \hline
+        Protocol Sniffing & Bus Pirate / Saleae & SPI / I2C Hattı & Yüksek \\ \hline
+        EMI Jamming & SDR / HackRF One & Fiziksel Kablolama & Orta \\ \hline
+        Firmware Analysis & JTAGulator / GDB & Mikrodenetleyici & Kritik \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resimp.png}
+    \caption{Donanım Analiz Araçları ve Wheatstone Köprüsü Üzerindeki Saldırı Noktaları Diyagramı.}
+    \label{fig:p}
+\end{figure}
+
+\section{Dinamik Sistem Analizi ve Diferansiyel Modelleme}
+Wheatstone köprüsü analizleri genellikle statik durumlar (DC analizi) üzerinden yapılsa da, gerçek endüstriyel uygulamalarda (titreşim analizi, hızlı basınç değişimleri vb.) direnç değişimi zamana bağlı bir fonksiyondur. Bu bölümde, köprünün dinamik tepkisi matematiksel olarak modellenmiştir.
+
+\subsection{Zamana Bağlı Direnç Değişimi ve Giriş Sinyali}
+Bir strain gauge sensörünün yüksek frekanslı bir titreşime maruz kaldığı varsayılsın. Bu durumda bilinmeyen direnç $R_x(t)$, temel direnç $R_0$ ve zamana bağlı değişim bileşeni $\Delta R(t)$ cinsinden ifade edilir:
+
+\begin{equation}
+    R_x(t) = R_0 + \Delta R \cdot \sin(\omega t)
+\end{equation}
+
+Burada $\omega$, titreşimin açısal frekansıdır. Köprü çıkış gerilimi $V_{out}(t)$, bu dinamik değişime bağlı olarak Taylor serisi açılımı ile analiz edildiğinde, sistemin frekans cevabı (frequency response) ortaya çıkar.
+
+\subsection{Diferansiyel Çıkış ve Transfer Fonksiyonu}
+Köprü çıkışındaki kapasitif ve endüktif etkiler (kablo kapasitansı ve sensör endüktansı) dikkate alındığında, sistem ikinci dereceden bir diferansiyel denklem ile tanımlanır. Sistemin transfer fonksiyonu $H(s)$, s-düzleminde şu şekilde modellenir:
+
+\begin{equation}
+    H(s) = \frac{V_{out}(s)}{V_s(s)} = \frac{K}{s^2 + 2\zeta\omega_n s + \omega_n^2}
+\end{equation}
+
+Burada $K$ kazanç katsayısını, $\zeta$ sönüm oranını ve $\omega_n$ doğal frekansı temsil eder. Bu denklemlerin çözümü, sistemin ani darbelere (impulse response) nasıl tepki vereceğini belirler. Siber güvenlik açısından bu dinamik model, "Sinyal Enjeksiyon" saldırılarının sistemin doğal frekansıyla çakışıp rezonans yaratıp yaratmayacağını analiz etmek için hayati öneme sahiptir.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resimy.png}
+    \caption{Wheatstone Köprüsü Dinamik Frekans Tepkisi ve Bode Diyagramı Analizi.}
+    \label{fig:y}
+\end{figure}
+    
+
+
+\subsection{Yapay Zeka Destekli Hata Düzeltme Algoritmaları}
+Geleceğin ölçüm sistemlerinde, köprüden gelen veriler doğrudan işlenmek yerine bir Yapay Sinir Ağı (ANN) filtresinden geçirilir. Bu algoritmalar, köprünün lineer olmayan bölgelerindeki sapmaları (non-linearity) ve sıcaklık sürüklenmelerini (drift) minimize etmek için eğitilir. 
+
+Eğitilmiş bir modelin hata fonksiyonu $E$, beklenen değer $y_i$ ve tahmin edilen değer $\hat{y}_i$ üzerinden Ortalama Kare Hata (MSE) ile minimize edilir:
+
+\begin{equation}
+    E = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+\end{equation}
+
+Bu hibrit yapı (Analog Köprü + Yapay Zeka), siber saldırganların oluşturduğu "anormal" veri desenlerini (anomalies) anında tespit ederek sistemi güvenli moda alabilir.
+
+\section{Genel Değerlendirme ve Gelecek Vizyonu: Siber-Fiziksel Güvenlikte Yeni Paradigmalar}
+
+Bu kapsamlı çalışma süresince, 19. yüzyılda Sir Charles Wheatstone tarafından popüler hale getirilen köprü topolojisinin, modern dijital dünyanın siber-fiziksel katmanındaki kritik rolü derinlemesine analiz edilmiştir. Elde edilen bulgular, basit bir direnç ölçüm tekniğinin nasıl olup da stratejik bir endüstriyel veri kaynağına dönüştüğünü ortaya koymaktadır.
+
+\subsection{Donanım ve Yazılım Katmanlarının Entegrasyonu}
+Wheatstone köprüsü, doğası gereği analog bir yapıdadır; ancak günümüzün Sanayi 4.0 ve IoT ekosisteminde bu yapı, karmaşık sinyal koşullama katmanları ve mikrodenetleyiciler ile çevrelenmiştir. Bu entegrasyon, beraberinde "Analog Zafiyet" (Analog Vulnerability) riskini getirmiştir. Analiz edilen Flipper Zero, Bus Pirate ve SDR temelli saldırı senaryoları göstermektedir ki; siber güvenlik sadece bitler ve baytlar üzerinden değil, doğrudan voltajlar ve dirençler üzerinden de kurgulanmak zorundadır.
+
+\subsection{Mühendislik Etiği ve Kritik Altyapı Koruma}
+Güvenlik prensipleri açısından, tasarlanan her bir sensör arayüzünün siber saldırılara karşı dirençli olması (resilience), mühendislik etiğinin bir parçasıdır. Wheatstone köprüsü tabanlı bir basınç sensörünün manipüle edilmesi, sadece hatalı veri üretmekle kalmaz; boru hattı patlamalarından enerji şebekesi çökmelerine kadar geniş bir spektrumda fiziksel yıkıma yol açabilir. Bu nedenle, tasarım aşamasında hata analizleri (Error Analysis) yapılırken, bu hataların kötü niyetli aktörler tarafından birer "arka kapı" (backdoor) olarak kullanılabileceği unutulmamalıdır.
+
+\subsection{Kısa Özet ve Değerlendirme}
+Bu çalışma, Wheatstone köprüsü düzeneğinin endüstriyel sensör teknolojilerindeki temel rolünü ve bu analog yapının siber-fiziksel sistemler (SPS) bağlamındaki güvenlik zafiyetlerini incelemektedir. Köprünün denge denklemleri ve enstrümantasyon yükselteci entegrasyonu üzerinden yapılan teknik analizler, Flipper Zero ve Bus Pirate gibi donanım araçlarıyla gerçekleştirilebilecek sinyal manipülasyonu ve veri enjeksiyonu saldırılarına karşı temel oluşturmaktadır. Sonuç olarak, analog katmandaki hassasiyetin sadece ölçüm doğruluğu için değil, aynı zamanda kritik altyapıların siber savunma stratejileri için de hayati önem taşıdığı saptanmıştır.
+
+\subsection{Gelecek Çalışmalar ve Teknolojik Öngörüler}
+Önümüzdeki yıllarda, Wheatstone köprüsü mimarisinin Yapay Zeka (AI) destekli anomali algılama sistemleri ile donatılması beklenmektedir. Klasik diferansiyel denklemlerin yerini, sinyalin parmak izini (fingerprinting) tanıyan derin öğrenme modelleri alacaktır. Grafen ve karbon nanotüp tabanlı yeni nesil sensörler, köprünün hassasiyetini artırırken, siber güvenlik uzmanlarının da bu "kuantum seviyesindeki" veriyi korumak için yeni kriptografik donanım modülleri geliştirmesi gerekecektir.
+
+\section{Sonuç}
+Özetle; Wheatstone köprüsü, elektrik tarihinin en eski ve en güvenilir ölçüm tekniklerinden biri olmaya devam ederken, siber-fiziksel sistemlerin güvenliğini belirleyen en zayıf veya en güçlü halka olma potansiyeline sahiptir. Bu ödev kapsamında sunulan teorik ispatlar ve siber güvenlik senaryoları, mühendislik disiplini ile güvenlik vizyonunun ayrılmaz bir bütün olduğunu vurgulamaktadır.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resimx.png}
+    \caption{Siber-Fiziksel Sistemlerde Güvenlik Katmanlarının Bütüncül Görünümü: Sensörden Karar Mekanizmasına}
+    \label{fig:x}
+\end{figure}
+
+
+\newpage
+% Kaynakça
+\begin{thebibliography}{17}
+
+\bibitem{1} C. Wheatstone, "An Account of Several New Instruments and Processes for Determining the Constants of a Voltaic Circuit," \emph{Philosophical Transactions of the Royal Society of London}, cilt 133, ss. 303-327, 1843.
+
+\bibitem{2} R. L. Boylestad, \emph{Introductory Circuit Analysis}, 13. baskı, Pearson, 2015.
+
+\bibitem{3} D. Halliday, R. Resnick ve J. Walker, \emph{Fundamentals of Physics}, 10. baskı, Wiley, 2013.
+
+\bibitem{4} J. W. Nilsson ve S. A. Riedel, \emph{Electric Circuits}, 10. baskı, Pearson, 2014.
+
+\bibitem{5} W. D. Cooper ve A. D. Helfrick, \emph{Electronic Instrumentation and Measurement Techniques}, Prentice Hall, 1985.
+
+\bibitem{6} B. C. Kulaksız, \emph{Endüstriyel Kontrol Sistemlerinde Sensör Güvenliği ve Siber-Fiziksel Tehdit Analizi}, 1. Baskı, Ankara: Teknik Yayıncılık, 2022.
+
+\bibitem{7} H. Norton, \emph{Handbook of Transducers}, Prentice Hall, 1989.
+
+\bibitem{8} A. S. Morris ve R. Langari, \emph{Measurement and Instrumentation: Theory and Application}, Academic Press, 2012.
+
+\bibitem{9} R. Pallás-Areny ve J. G. Webster, \emph{Sensors and Signal Conditioning}, 2. baskı, Wiley-Interscience, 2001.
+
+\bibitem{10} N. Kularatna, \emph{Digital and Analogue Instrumentation: Testing and Measurement}, IEE Electrical Measurement Series, 2003.
+
+\bibitem{11} M. Gungor ve G. Hancke, "Industrial Wireless Sensor Networks: Challenges, Design Principles, and Technical Approaches," \emph{IEEE Transactions on Industrial Electronics}, cilt 56, no. 10, 2013.
+
+\bibitem{12} Wikipedia Özgür Ansiklopedi, "Wheatstone Köprüsü", [Çevrimiçi]. Erişim Adresi: \url{https://tr.wikipedia.org/wiki/Wheatstone_köprüsü}, [Erişim Tarihi: 22 Aralık 2025].
+
+\bibitem{13} J. Fraden, \emph{Handbook of Modern Sensors: Physics, Designs, and Applications}, 4. baskı, Springer, 2010.
+
+\bibitem{14} 
+S. Franco, \emph{Design with Operational Amplifiers and Analog Integrated Circuits}, 4. baskı, McGraw-Hill Education, 2014.
+
+\bibitem{15} 
+Analog Devices, \emph{A Designer's Guide to Instrumentation Amplifiers}, 3. baskı, Technical Reference Books, 2006.
+
+\bibitem{16} 
+J. P. Bentley, \emph{Principles of Measurement Systems}, 4. baskı, Pearson Education, 2005.
+
+\bibitem{17} 
+Y. Shoukry vd., "PyCPSA: Cyber-Physical Security Analysis of Industrial Control Systems," \emph{IEEE Design \& Test}, cilt 33, no. 4, ss. 15-24, 2016.
+
+\bibitem{18} 
+S. Sridhar, A. Hahn ve M. Govindarasu, "Cyber–Physical System Security for the Electric Power Grid," \emph{Proceedings of the IEEE}, cilt 100, no. 1, ss. 210-224, 2012.
+
+\bibitem{19} 
+B. Amanullah vd., "A Review on Cybersecurity Issues and Mitigation Strategies in Industrial Control Systems," \emph{International Journal of Critical Infrastructure Protection}, cilt 30, 2020.
+
+\bibitem{20} 
+N. Idika ve B. Bhargava, "Extending Attack Graph Analysis to Include Physical Access Attacks on Sensors," \emph{IEEE International Conference on Intelligence and Security Informatics}, ss. 218-223, 2012.
+
+\end{thebibliography}
+
+\end{document}
